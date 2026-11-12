@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Productos 📦</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📦 Gestión de Productos</h1>
+            <button id="btnOpenCreate" class="btn btn-primary">＋ Nuevo Producto</button>
+        </header>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Img</th>
+                        <th>Código</th>
+                        <th>Nombre</th>
+                        <th>Precio Venta</th>
+                        <th>Stock Min</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="productsTableBody"></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Modal Formulario -->
+    <div id="productModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="btnCloseModal">&times;</span>
+            <h2 id="modalTitle">Detalle de Producto</h2>
+            
+            <form id="productForm">
+                <input type="hidden" id="productId">
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Nombre:</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Código de Barras:</label>
+                        <input type="text" id="barcode">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Precio Compra:</label>
+                        <input type="number" step="0.01" id="price_in">
+                    </div>
+                    <div class="form-group">
+                        <label>Precio Venta:</label>
+                        <input type="number" step="0.01" id="price_out">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Inv. Mínimo:</label>
+                        <input type="number" id="inventary_min" value="10">
+                    </div>
+                    <div class="form-group">
+                        <label>Categoría ID:</label>
+                        <input type="text" id="category_id">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Unidad:</label>
+                        <input type="text" id="unit" placeholder="Pza, Kg, Lt">
+                    </div>
+                    <div class="form-group">
+                        <label>Presentación:</label>
+                        <input type="text" id="presentation" placeholder="Caja, Bolsa">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>URL de Imagen:</label>
+                    <input type="url" id="image">
+                </div>
+
+                <div class="form-group">
+                    <label>Descripción:</label>
+                    <textarea id="description" rows="3"></textarea>
+                </div>
+
+                <div class="modal-buttons">
+                    <button type="submit" id="btnSave" class="btn btn-success">Guardar</button>
+                    <button type="button" id="btnClose" class="btn btn-secondary">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
