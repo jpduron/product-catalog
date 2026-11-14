@@ -27,3 +27,10 @@ th { background-color: #f1f5f9; }
 .form-group label { display: block; margin-bottom: 5px; font-weight: 500; font-size: 0.9rem; }
 .form-group input, .form-group textarea { width: 100%; padding: 8px; border: 1px solid var(--border-color); border-radius: 6px; box-sizing: border-box; }
 .modal-buttons { display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+.help-text {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.8rem;
+    color: #64748b;
+    line-height: 1.3;
+}
