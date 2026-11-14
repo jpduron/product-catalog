@@ -46,7 +46,10 @@
                     </div>
                     <div class="form-group">
                         <label>Código de Barras:</label>
-                        <input type="text" id="barcode">
+                        <div style="display: flex; gap: 8px;">
+                            <input type="text" id="barcode" placeholder="Ej. 75010051... path" style="flex: 1;">
+                            <button type="button" id="btnFetchOpenFood" class="btn btn-secondary btn-sm" style="white-space: nowrap;">🔍 Buscar en la Nube</button>
+                        </div>
                     </div>
                 </div>
 
@@ -98,6 +101,14 @@
                     <button type="button" id="btnClose" class="btn btn-secondary">Cancelar</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Modal para Zoom de Imagen -->
+    <div id="imageModal" class="modal">
+        <div class="modal-content" style="max-width: 500px; text-align: center; background: transparent; box-shadow: none;">
+            <span class="close-btn" id="btnCloseImageModal" style="color: white; font-size: 2rem; cursor: pointer; background: rgba(0,0,0,0.6); padding: 2px 12px; border-radius: 50%; float: right; margin-bottom: 10px;">&times;</span>
+            <img id="modalZoomImg" src="" style="width: 100%; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); object-fit: contain; max-height: 80vh;">
         </div>
     </div>
 

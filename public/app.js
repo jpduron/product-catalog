@@ -19,7 +19,7 @@ async function fetchProducts() {
         products.forEach(p => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td><img src="${p.image || 'https://via.placeholder.com/40'}" class="thumb"></td>
+                <td><img src="${p.image || 'https://via.placeholder.com/40'}" class="thumb" onclick="openImageModal('${p.image || ''}')" style="cursor: pointer;" title="Haz clic para ampliar"></td>
                 <td>${p.barcode || 'N/A'}</td>
                 <td><strong>${p.name}</strong></td>
                 <td>$${Number(p.price_out).toFixed(2)}</td>
@@ -41,6 +41,46 @@ document.getElementById('btnOpenCreate').onclick = () => openModal(null, 'create
 document.getElementById('btnCloseModal').onclick = () => modal.style.display = 'none';
 document.getElementById('btnClose').onclick = () => modal.style.display = 'none';
 
+// --- INTEGRACIÓN OPEN FOOD FACTS (BÚSQUEDA POR CÓDIGO DE BARRAS) ---
+document.getElementById('btnFetchOpenFood').onclick = async () => {
+    const barcodeInput = document.getElementById('barcode');
+    const barcode = barcodeInput.value.trim();
+
+    if (!barcode) {
+        alert('Por favor, ingresa un código de barras primero.');
+        return;
+    }
+
+    const btn = document.getElementById('btnFetchOpenFood');
+    btn.innerText = 'Buscando...';
+    btn.disabled = true;
+
+    try {
+        const response = await fetch(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`);
+        const data = await response.json();
+
+        if (data.status === 1 && data.product) {
+            const prod = data.product;
+            
+            // Autocompletar campos del formulario con los datos de la nube
+            document.getElementById('name').value = prod.product_name || prod.product_name_es || '';
+            document.getElementById('image').value = prod.image_front_url || prod.image_url || '';
+            document.getElementById('presentation').value = prod.quantity || '';
+            document.getElementById('description').value = prod.ingredients_text || prod.generic_name || '';
+            
+            alert('¡Producto encontrado y cargado exitosamente desde Open Food Facts!');
+        } else {
+            alert('No se encontró ningún producto con ese código de barras en la base de datos global.');
+        }
+    } catch (error) {
+        console.error('Error al consultar Open Food Facts:', error);
+        alert('Ocurrió un error al conectar con el servicio de Open Food Facts.');
+    } finally {
+        btn.innerText = '🔍 Buscar en la Nube';
+        btn.disabled = false;
+    }
+};
+
 async function openModal(id = null, mode = 'create') {
     modal.style.display = 'flex';
     productForm.reset();
@@ -48,6 +88,7 @@ async function openModal(id = null, mode = 'create') {
     const inputs = productForm.querySelectorAll('input, textarea');
     inputs.forEach(i => i.disabled = false);
     document.getElementById('btnSave').style.display = 'inline-block';
+    document.getElementById('btnFetchOpenFood').style.display = 'inline-block';
 
     if (mode === 'create') {
         document.getElementById('modalTitle').innerText = 'Nuevo Producto';
@@ -70,6 +111,7 @@ async function openModal(id = null, mode = 'create') {
             document.getElementById('modalTitle').innerText = 'Detalle de Producto';
             inputs.forEach(i => i.disabled = true);
             document.getElementById('btnSave').style.display = 'none';
+            document.getElementById('btnFetchOpenFood').style.display = 'none';
         } else {
             document.getElementById('modalTitle').innerText = 'Editar Producto';
         }
@@ -115,3 +157,28 @@ async function deleteProduct(id) {
     if (res.ok) fetchProducts();
     else alert('Error al eliminar');
 }
+
+// --- CONTROL DE MODAL DE ZOOM DE IMAGEN ---
+const imageModal = document.getElementById('imageModal');
+const modalZoomImg = document.getElementById('modalZoomImg');
+const btnCloseImageModal = document.getElementById('btnCloseImageModal');
+
+function openImageModal(url) {
+    if (!url) {
+        alert('Este producto no cuenta con una imagen registrada.');
+        return;
+    }
+    modalZoomImg.src = url;
+    imageModal.style.display = 'flex';
+}
+
+btnCloseImageModal.onclick = () => {
+    imageModal.style.display = 'none';
+};
+
+// Cerrar el modal si hacen clic fuera de la imagen
+window.addEventListener('click', (event) => {
+    if (event.target === imageModal) {
+        imageModal.style.display = 'none';
+    }
+});
